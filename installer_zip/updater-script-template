@@ -1,0 +1,20 @@
+ui_print("");
+ui_print("");
+ui_print("");
+ui_print("%NAME% installer");
+ui_print("");
+ui_print(">>> Mounting partitions");
+	assert(mount("ext4", "EMMC", "system", "/system") || ui_print("(system is mounted already)"));
+	ui_print(">>> Installing modules");
+	package_extract_dir("system", "/system");
+ui_print(">>> Flashing kernel");
+set_progress(0.4);
+	assert(package_extract_file("boot.img", "/tmp/boot.img"),
+	run_program("/sbin/dd", "if=/tmp/boot.img", "of=/dev/block/mmcblk0p19"));
+ui_print("");
+ui_print("");
+ui_print(">>> Unmounting partitions");
+set_progress(0.99);
+	assert(unmount("/system") || ui_print("(system is unmounted already)"));
+ui_print("");
+ui_print("Done!");
