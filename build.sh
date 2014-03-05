@@ -8,16 +8,16 @@ if ! type "bbootimg" > /dev/null; then
 	exit 1
 fi
 
-cd $KERNEL_REPO
-make -j2
-RET=$?
-if [ ! $RET -eq 0 ]; then
-	echo 'Building kernel failed.'
-	exit 1
-fi
-
-cd ..
-echo 'Kernel built successfully.'
+# cd $KERNEL_REPO
+# make -j2
+# RET=$?
+# if [ ! $RET -eq 0 ]; then
+# 	echo 'Building kernel failed.'
+# 	exit 1
+# fi
+# 
+# cd ..
+# echo 'Kernel built successfully.'
 
 if [ ! -d initramfs ]; then
 	echo "Error: directory 'initramfs' doesn't exist."
