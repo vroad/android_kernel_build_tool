@@ -58,6 +58,10 @@ on emmc-fs
    devwait emmc@cache
    mount ext4 emmc@cache /cache nosuid nodev noatime barrier=1
 
+   mkdir /nfc_record 0700 system system
+   devwait emmc@nfc_record
+   mount ext4 emmc@nfc_record /nfc_record nosuid nodev noatime barrier=1
+
    mkdir /devlog 0700 root root
    devwait emmc@devlog
    e2fsck emmc@devlog
@@ -299,6 +303,9 @@ on post-fs-data
 	setprop vold.post_fs_data_done 1
 
 on boot
+   chmod 0770 /nfc_record
+   chown system system /nfc_record
+
    # we will remap this as /mnt/sdcard with the sdcard fuse tool
    mkdir /data/media 0770 media_rw media_rw
    chown media_rw media_rw /data/media
@@ -368,8 +375,8 @@ on boot
 # permissions for NFC
     chmod 0600 /dev/pn544
     chown nfc nfc /dev/pn544
-    chown nfc nfc /sys/class/NFC_sensor/comn/nxp_uicc_swp
-    chmod 0664 /sys/class/NFC_sensor/comn/nxp_uicc_swp
+    setprop debug.nfc.fw_download "true"
+    setprop debug.nfc.fw_boot_download "false"
 
     # disable L27 S3 static pull down disable
     write /sys/kernel/debug/pm8921-dbg/addr 0x0E3
