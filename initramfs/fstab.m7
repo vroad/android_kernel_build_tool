@@ -4,4 +4,5 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
 userdata	/data	ext4	noatime,nosuid,nodev,noauto_da_alloc,discard	encryptable=extra
+/devices/platform/msm_sdcc.4/mmc_host   /storage/ext_sd     vfat default    voldmanaged=sdcard:auto
 /devices/platform/msm_hsusb_host    auto    vfat    defaults    voldmanaged=usb:auto

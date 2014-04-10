@@ -10,7 +10,7 @@ ui_print(">>> Mounting partitions");
 ui_print(">>> Flashing kernel");
 set_progress(0.4);
 	assert(package_extract_file("boot.img", "/tmp/boot.img"),
-	run_program("/sbin/dd", "if=/tmp/boot.img", "of=/dev/block/mmcblk0p19"));
+	run_program("/sbin/dd", "if=/tmp/boot.img", "of=/dev/block/mmcblk0p36"));
 ui_print("");
 ui_print("");
 ui_print(">>> Unmounting partitions");

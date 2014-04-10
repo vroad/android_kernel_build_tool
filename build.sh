@@ -1,7 +1,7 @@
 #!/bin/sh
 
-KERNEL_REPO=Monarudo_GPU_M7
-ZIP_NAME=dlxj-4.4-sense5.5-kernel
+KERNEL_REPO=m7-GPE
+ZIP_NAME=m7wlj-4.4-sense5.5-kernel
 
 if ! type "bbootimg" > /dev/null; then
 	echo 'bbootimg not found.'
