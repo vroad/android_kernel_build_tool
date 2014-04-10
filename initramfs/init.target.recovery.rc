@@ -93,7 +93,7 @@ on post-fs-data
 
 on boot
 
-    # Temp disable 3 cpus to prevent heat for DLX
+    # Temp disable 3 cpus to prevent heat for M7
     write /sys/devices/system/cpu/cpu1/online 0
     write /sys/devices/system/cpu/cpu2/online 0
     write /sys/devices/system/cpu/cpu3/online 0
@@ -170,7 +170,7 @@ service mfgsrv /sbin/mfgsrv -i -t /dev/ttyHSL0 -t /dev/ttyHSUSB1
     group root
     disabled
 
-service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -i /vendor/firmware/
+service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -i /vendor/firmware/ -u
     class core
     user root
     oneshot

@@ -43,7 +43,7 @@ on emmc-fs
    mkdir /system
    devwait emmc@system
    mount ext4 emmc@system /system ro noatime barrier=1
-   insmod /system/lib/modules/exfat.ko
+   insmod /system/lib/modules/texfat.ko
 
    # Load Mocana FIPS module. Add here since it can make sure system is mounted
    insmod /system/lib/modules/moc_platform_mod.ko
@@ -52,15 +52,11 @@ on emmc-fs
 
    mkdir /data 0771 system system
    devwait emmc@userdata
-   mount_all /fstab.dlxj
+   mount_all /fstab.m7
 
    mkdir /cache 0770 system cache
    devwait emmc@cache
    mount ext4 emmc@cache /cache nosuid nodev noatime barrier=1
-
-   mkdir /nfc_record 0700 system system
-   devwait emmc@nfc_record
-   mount ext4 emmc@nfc_record /nfc_record nosuid nodev noatime barrier=1
 
    mkdir /devlog 0700 root root
    devwait emmc@devlog
@@ -249,15 +245,12 @@ on init
     # See storage config details at http://source.android.com/tech/storage/
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage/emulated 0555 root root
-    mkdir /storage/ext_sd 0000 system system
     mkdir /storage/usb 0700 root root
     mkdir /mnt/media_rw/usb 0700 media_rw media_rw
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
     export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
     export EMULATED_STORAGE_TARGET /storage/emulated
-    export EXTERNAL_STORAGE2 /storage/ext_sd
-    export EXTERNAL_STORAGE3 /storage/ext_sd
     export EXTERNAL_STORAGE4 /storage/usb
     export EXTERNAL_STORAGE5 /storage/usb
 
@@ -266,8 +259,6 @@ on init
     symlink /storage/emulated/legacy /mnt/sdcard
     symlink /storage/emulated/legacy /storage/sdcard0
     symlink /mnt/shell/emulated/0 /storage/emulated/legacy
-    # create mountpoints
-    symlink /storage/ext_sd /sdcard2
     symlink /storage/usb /mnt/usb
 
     # NETWORK: NAT setting
@@ -303,9 +294,6 @@ on post-fs-data
 	setprop vold.post_fs_data_done 1
 
 on boot
-   chmod 0770 /nfc_record
-   chown system system /nfc_record
-
    # we will remap this as /mnt/sdcard with the sdcard fuse tool
    mkdir /data/media 0770 media_rw media_rw
    chown media_rw media_rw /data/media
@@ -375,8 +363,8 @@ on boot
 # permissions for NFC
     chmod 0600 /dev/pn544
     chown nfc nfc /dev/pn544
-    setprop debug.nfc.fw_download "true"
-    setprop debug.nfc.fw_boot_download "false"
+    chown nfc nfc /sys/class/NFC_sensor/comn/nxp_uicc_swp
+    chmod 0664 /sys/class/NFC_sensor/comn/nxp_uicc_swp
 
     # disable L27 S3 static pull down disable
     write /sys/kernel/debug/pm8921-dbg/addr 0x0E3
@@ -514,7 +502,7 @@ service qb_offmode_alarm /system/bin/qb_offmode_alarm
 	disabled
 	oneshot
 
-service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /vendor/firmware/
+service kickstart /system/bin/qcks -1 modem_st1 -2 modem_st2 -3 radio_config -4 cdma_record -i /vendor/firmware/ -u
 		class core
 		user root
 		oneshot
@@ -560,7 +548,7 @@ service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emul
     class late_start
 
 # fusewrapped external sdcard daemon running as media_rw (1023)
-service fuse_usb /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usb /storage/usb
+service fuse_usb /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usb /storage/usb
     class late_start
     disabled
 
@@ -781,37 +769,9 @@ on fs
     chmod 0600 /dev/uhid
     chown bluetooth bluetooth /dev/uhid
 
-## BT FOTA
+    ## BT FOTA
 service btbkbluez /system/bin/sh /system/etc/bt_bk_bluez.sh
     class late_start
     user root
     oneshot
-
 #--SSD_BT
-
-# Felica - BEGIN
-service felica_daemon /system/bin/felica_daemon
-    class late_start
-    oneshot
-
-service felica_agent /system/bin/felica_agent
-    class late_start
-    oneshot
-# Felica - END
-
-#One-seg services - BEGIN
-service jelly /system/bin/jellyservice
-    class late_start
-    user root
-    group drm system audio camera graphics inet net_bt net_bt_admin net_raw sdcard_rw
-
-service mtvmf /system/bin/mtvmfservice
-    class late_start
-    user system
-    group system audio camera graphics inet net_bt net_bt_admin net_raw sdcard_rw
-
-service mtvmfrec /system/bin/mtvmfrecservice
-    class late_start
-    user system
-    group system audio camera graphics inet net_bt net_bt_admin net_raw sdcard_rw
-#One-seg services - END
