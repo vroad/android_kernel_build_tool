@@ -1,6 +1,6 @@
 #!/bin/sh
 
-KERNEL_REPO=m7-GPE
+KERNEL_REPO=m7-Sense
 ZIP_NAME=m7wlj-4.4-sense5.5-kernel
 
 if ! type "bbootimg" > /dev/null; then

@@ -79,10 +79,10 @@ service memlock /system/bin/memlock
     cgroup bg
     user root
 
-service thermald /system/bin/thermald
-    class core
-    user root
-    group root
+#service thermald /system/bin/thermald
+#    class core
+#    user root
+#    group root
 
 service post-boot /system/bin/sh /system/etc/init.post_boot.sh
     user root

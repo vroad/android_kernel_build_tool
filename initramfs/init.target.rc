@@ -43,7 +43,7 @@ on emmc-fs
    mkdir /system
    devwait emmc@system
    mount ext4 emmc@system /system ro noatime barrier=1
-   insmod /system/lib/modules/exfat.ko
+   insmod /system/lib/modules/texfat.ko
 
    # Load Mocana FIPS module. Add here since it can make sure system is mounted
    insmod /system/lib/modules/moc_platform_mod.ko
