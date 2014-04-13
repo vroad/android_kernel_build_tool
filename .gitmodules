@@ -1,3 +1,3 @@
-[submodule "m7-Sense"]
-	path = m7-Sense
-	url = https://github.com/vroad/m7-Sense
+[submodule "m7-GPE"]
+	path = m7-GPE
+	url = https://github.com/vroad/m7-GPE
